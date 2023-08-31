@@ -1,0 +1,58 @@
+<html>
+    <head>
+        <title>Login Here </title>
+    </head>
+<body>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Raleway:400,700');
+
+        body {
+        background: #c0c0c0; 
+        font-family: Raleway, sans-serif;
+        font-size: 30;
+        color: #666;
+        }
+
+        .login {
+        margin: 50px auto;
+        padding: 90px 70px;
+        max-width: 300px;
+        border-radius: 5px;
+        background: #fff;
+        box-shadow: 1px 1px 1px #666;
+        }
+        
+        .login h2 {
+            margin: 20px 0 0; 
+            color: #FFD333; 
+            font-size: 28px;
+        }
+
+        .login h2,
+        {
+            text-align: center; 
+            font-size: .26em;   
+        }
+    </style>
+    <form class="login">
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="dialogbox">
+                    <div class="body">
+                    <span class="tip tip-left"></span>
+                    <div class="message">
+                        <span>{{ msg }}</span>
+                    </div>
+                    </div>
+                </div>
+            {% endfor %}
+        
+        {% else %}
+        <h2>Forget Password</h2>
+        <h2>Verification Token has sent to your email<br><br>Check Your Mail </h2> 
+        {% endif %}
+
+      </form>
+</body>
+
+</html>

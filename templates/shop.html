@@ -1,0 +1,302 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<body>
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="{% url 'home' %}">Home</a>
+                    <a class="breadcrumb-item text-dark" href="{% url 'shop' %}">Shop</a>
+                    <span class="breadcrumb-item active">Shop List</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- Shop Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <!-- Shop Sidebar Start -->
+            <div class="col-lg-3 col-md-4">
+                <!-- Price Start -->
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by price</span></h5>
+                <div class="bg-light p-4 mb-30">
+                    <form method="get" action="{% url 'price_filter' %}">
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <h5 class="text-muted m-1">All Price</h5>
+                            <span class="badge border font-weight-normal">{{total_no_product}}</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" name="price_range_first" class="custom-control-input" id="price-1">
+                            <label class="custom-control-label" for="price-1">$0 - $100</label>
+                            <span class="badge border font-weight-normal">{{first_range_no_product}}</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" name="price_range_second" class="custom-control-input" id="price-2">
+                            <label class="custom-control-label" for="price-2">$100 - $200</label>
+                            <span class="badge border font-weight-normal">{{second_range_no_product}}</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" name="price_range_third" class="custom-control-input" id="price-3">
+                            <label class="custom-control-label" for="price-3">$200 - $300</label>
+                            <span class="badge border font-weight-normal">{{third_range_no_product}}</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" name="price_range_fourth" class="custom-control-input" id="price-4">
+                            <label class="custom-control-label" for="price-4">$300 - $400</label>
+                            <span class="badge border font-weight-normal">{{fourth_range_no_product}}</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
+                            <input type="checkbox" name="price_range_fifth" class="custom-control-input" id="price-5">
+                            <label class="custom-control-label" for="price-5">$400 - $500</label>
+                            <span class="badge border font-weight-normal">{{fifth_range_no_product}}</span>
+                        </div><br>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
+                            <button class ="btn btn-sm btn-dark" type="submit">Filter</button>
+                            <button class ="btn btn-sm btn-dark" type="submit">clear All</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- Price End -->
+                
+                <!-- Color Start -->
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by color</span></h5>
+                <div class="bg-light p-4 mb-30">
+                    <form method="get" action="{% url 'shop' %}">
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <h5 class="text-muted m-1">All Color</h5>
+                            <span class="badge border font-weight-normal">{{total_no_product}}</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" value="Color" name="Black" class="custom-control-input" id="color-1">
+                            <label class="custom-control-label" for="color-1">Black</label>
+                            <span class="badge border font-weight-normal">{{total_black_products}}</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" value="Color" name="White" class="custom-control-input" id="color-2">
+                            <label class="custom-control-label" for="color-2">White</label>
+                            <span class="badge border font-weight-normal">{{total_white_products}}</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" value="Color" name="Red" class="custom-control-input" id="color-3">
+                            <label class="custom-control-label" for="color-3">Red</label>
+                            <span class="badge border font-weight-normal">{{total_red_products}}</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" value="Color" name="Blue" class="custom-control-input" id="color-4">
+                            <label class="custom-control-label" for="color-4">Blue</label>
+                            <span class="badge border font-weight-normal">{{total_blue_products}}</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
+                            <input type="checkbox" value="Color" name="Green" class="custom-control-input" id="color-5">
+                            <label class="custom-control-label" for="color-5">Green</label>
+                            <span class="badge border font-weight-normal">{{total_green_products}}</span>
+                        </div><br>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
+                            <button class ="btn btn-sm btn-dark m3" type="submit" name="color_form">Filter</button>
+                            <button class ="btn btn-sm btn-dark" type="submit">clear All</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- Color End -->
+
+                <!-- Size Start -->
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by size</span></h5>
+                <div class="bg-light p-4 mb-30">
+                    <form method="get" action="{% url 'shop' %}">
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <h5 class="text-muted m-1">All Size</h5>
+                            <span class="badge border font-weight-normal">{{total_no_product}}</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" value="size" name="XS" class="custom-control-input" id="size-1">
+                            <label class="custom-control-label" for="size-1">XS</label>
+                            <span class="badge border font-weight-normal">{{total_xs_products}}</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" value="size" name="S" class="custom-control-input" id="size-2">
+                            <label class="custom-control-label" for="size-2">S</label>
+                            <span class="badge border font-weight-normal">{{total_small_products}}</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" value="size" name="M" class="custom-control-input" id="size-3">
+                            <label class="custom-control-label" for="size-3">M</label>
+                            <span class="badge border font-weight-normal">{{total_medium_products}}</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" value="size" name="L" class="custom-control-input" id="size-4">
+                            <label class="custom-control-label" for="size-4">L</label>
+                            <span class="badge border font-weight-normal">{{total_large_products}}</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
+                            <input type="checkbox" value="size" name="XL" class="custom-control-input" id="size-5">
+                            <label class="custom-control-label" for="size-5">XL</label>
+                            <span class="badge border font-weight-normal">{{total_xlarge_products}}</span>
+                        </div><br>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
+                            <button class ="btn btn-sm btn-dark m3" type="submit" name="size_form">Filter</button>
+                            <button class ="btn btn-sm btn-dark" type="submit">clear All</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- Size End -->
+            </div>
+            <!-- Shop Sidebar End -->
+
+
+            <!-- Shop Product Start -->
+            <div class="col-lg-9 col-md-8">
+                <div class="row pb-3">
+                    <div class="col-12 pb-1">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div class="ml-2">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Sorting</button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="#">Latest</a>
+                                        <a class="dropdown-item" href="#">Popularity</a>
+                                        <a class="dropdown-item" href="#">Best Rating</a>
+                                    </div>
+                                </div>
+                                <div class="btn-group ml-2">
+                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Showing</button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="#">10</a>
+                                        <a class="dropdown-item" href="#">20</a>
+                                        <a class="dropdown-item" href="#">30</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if total_product %}
+                        {% for item in total_product %}
+                            <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                                <div class="product-item bg-light mb-4">
+                                    <div class="product-img position-relative overflow-hidden">
+                                        <img class="img-fluid w-100" src="/media/{{item.display_image}}" alt="image">
+                                        <div class="product-action">
+                                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                                            <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="text-center py-4">
+                                        <a class="h6 text-decoration-none text-truncate" href="/detail/{{ item.slug }}">{{ item.name }}</a>
+                                        <div class="d-flex align-items-center justify-content-center mt-2">
+                                            <h5>{% if item.discount_price != 0 %}${{ item.discount_price }}</h5>
+                                            <h6 class="text-muted ml-2"><del>{{ item.price }}</del></h6>
+                                            {% else %}
+                                            <h5>${{ item.price }}</h5>
+                                            {% endif %}
+
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-center mb-1">
+                                            <small class="fa fa-star text-primary mr-1"></small>
+                                            <small class="fa fa-star text-primary mr-1"></small>
+                                            <small class="fa fa-star text-primary mr-1"></small>
+                                            <small class="fa fa-star text-primary mr-1"></small>
+                                            <small class="fa fa-star text-primary mr-1"></small>
+                                            <small>{{ average | floatformat:"0" }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    {% else %}
+                        {% for item in shop_product %}
+                            <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                                <div class="product-item bg-light mb-4">
+                                    <div class="product-img position-relative overflow-hidden">
+                                        <img class="img-fluid w-100" src="/media/{{item.display_image}}" alt="image">
+                                        <div class="product-action">
+                                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                                            <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="text-center py-4">
+                                        <a class="h6 text-decoration-none text-truncate" href="/detail/{{ item.slug }}">{{ item.name }}</a>
+                                        <div class="d-flex align-items-center justify-content-center mt-2">
+                                            <h5>{% if item.discount_price != 0 %}${{ item.discount_price }}</h5>
+                                            <h6 class="text-muted ml-2"><del>{{ item.price }}</del></h6>
+                                            {% else %}
+                                            <h5>${{ item.price }}</h5>
+                                            {% endif %}
+
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-center mb-1">
+                                            <small class="fa fa-star text-primary mr-1"></small>
+                                            <small class="fa fa-star text-primary mr-1"></small>
+                                            <small class="fa fa-star text-primary mr-1"></small>
+                                            <small class="fa fa-star text-primary mr-1"></small>
+                                            <small class="fa fa-star text-primary mr-1"></small>
+                                            <small>{{ average | floatformat:"0" }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    {% endif %}
+                
+                  {% if total_product %}
+                    <div class="col-12">
+                        <nav>
+                        <ul class="pagination justify-content-center">
+                            {% if total_product.has_previous %}
+                                <li class="page-item "><a class="page-link" href="/{{url}}?page={{total_product.previous_page_number}}">Previous</span></a></li>
+                            {% endif %}
+
+
+                            {% for n in totalpage %}
+                                <li class="page-item "><a class="page-link" href="/{{url}}?page={{n}}">{{n}}</a></li>
+                            {% endfor %}
+
+
+                            {% if total_product.has_next %}
+                                <li class="page-item"><a class="page-link" href="/{{url}}?page={{total_product.next_page_number}}">Next</a></li>
+                            {% endif %}
+                        </ul>
+                        </nav>
+                    </div>
+                   {% else %}
+                        <div class="col-12">
+                            <nav>
+                            <ul class="pagination justify-content-center">
+                                {% if shop_product.has_previous %}
+                                    <li class="page-item "><a class="page-link" href="/shop?page={{shop_product.previous_page_number}}">Previous</span></a></li>
+                                {% endif %}
+
+
+                                {% for n in totalpage %}
+                                    <li class="page-item "><a class="page-link" href="/shop?page={{n}}">{{n}}</a></li>
+                                {% endfor %}
+
+
+                                {% if shop_product.has_next %}
+                                    <li class="page-item"><a class="page-link" href="/shop?page={{shop_product.next_page_number}}">Next</a></li>
+                                {% endif %}
+                            </ul>
+                            </nav>
+                        </div>
+                     {% endif %}
+                    </div>
+                </div>
+            <!-- Shop Product End -->
+        </div>
+    </div>
+    <!-- Shop End -->
+</body>
+
+{% endblock %}
