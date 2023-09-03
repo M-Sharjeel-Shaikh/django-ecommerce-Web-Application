@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from customer.models import *
 from store.models import *
 from django.contrib.auth.models import User
@@ -8,6 +8,7 @@ from django.db.models import Avg
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib import auth
+from django.template.response import TemplateResponse
 
 
 # ====== filter price one not working
@@ -81,17 +82,11 @@ def home(request):
     return render(request, "index.html",context)
 
 
-
 def nav(request):
     try:
         customer = auth.get_user(request)
-        cart_detail = Cart.objects.filter(user = customer).all()
-        total_cart = cart_detail.count()
-
-        context= {
-            "total_cart": total_cart
-        }
-        return HttpResponse(context)
+        count = Cart.objects.filter(user = customer).count()
+        return render(request, "nav.html", context={'cart_count': count})
     except Exception as e:
         print(e)
         return redirect('/')

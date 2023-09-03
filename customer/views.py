@@ -3,7 +3,7 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages, auth
-from customer.models import Cart, Customer
+from customer.models import Cart, Customer, Favourite
 from django.contrib.auth import authenticate, login
 from django.core.mail import send_mail
 from rest_framework.response import Response
@@ -33,15 +33,38 @@ def create_cart(request, product_uid):
 
             cart.save()
 
-    return render(request, "cart.html")
+    return redirect('/user/cart')
 
 
 def cart(request):
     customer = auth.get_user(request)
     cart_detail = Cart.objects.filter(user = customer).all()
-    # for i in cart_detail:
-    #     print("-----------", i.color_varient)
     return render(request, "cart.html", context = {"cart_detail": cart_detail})
+
+
+def remove_cart(request, cart_uid):
+    Cart.objects.filter(id = cart_uid).first().delete()
+    return redirect("/user/cart")
+
+
+def add_favourite(request, product_uid):
+    user = auth.get_user(request)
+    customer= Customer.objects.get(user = user)
+    product = Product.objects.filter(uid = product_uid).first()
+    Favourite.objects.get_or_create(user= customer, favourite= product)
+    return redirect("/user/favourite")
+
+
+def favourite_user(request):
+    customer = auth.get_user(request)
+    customer= Customer.objects.get(user = customer)
+    favourite_products = Favourite.objects.filter(user = customer).all()
+    return render(request, "favourite.html", context = {"total_product": favourite_products})
+
+
+def remove_favourite(request, favourite_uid):
+    Favourite.objects.filter(id = favourite_uid).first().delete()
+    return redirect("/user/favourite")
 # =========================== End Customer Shopping Journey ================================
 
 

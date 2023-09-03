@@ -58,7 +58,7 @@
                     <h3 class="font-weight-semi-bold mb-4">${{product.price}}</h3>
                     <p class="mb-4">{{product.title}}</p>
                     <!-- Cart Form -->
-                    <form method="POST" action="{% url 'cart' %}{{product.uid}}">
+                    <form method="POST" action="/user/create_cart/{{product.uid}}">
                         {% csrf_token %}
                         <div class="d-flex mb-3">
                             <strong class="text-dark mr-3">Sizes:</strong>

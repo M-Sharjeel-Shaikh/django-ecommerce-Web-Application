@@ -11,14 +11,14 @@ class Customer(models.Model):
     
     def __str__(self):
         return self.user.username
-
-    def __str__(self):
-        return self.user.id
     
 
 class Favourite(models.Model):
     user = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='favorites')
     favourite = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='favorites')
+
+    def __str__(self):
+        return str(self.user)
 
     
 

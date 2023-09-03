@@ -16,7 +16,11 @@ urlpatterns = [
 
     # =========== Customer Journey ==========
     path('cart/', cart, name='cart'),
-    path('cart/<product_uid>', create_cart, name='cart'),
+    path('create_cart/<product_uid>', create_cart, name='create_cart'),
+    path('remove_cart/<cart_uid>', remove_cart, name='remove-cart'),
+    path('favourite/', favourite_user, name='favourite'),
+    path('favourite/<product_uid>', add_favourite, name='add_favourite'),
+    path('remove_favourite/<favourite_uid>', remove_favourite, name='remove-favourite'),
 
     # =========== Customer Urls for APIs=====
     path('Login/', Apilogin, name="Login"),
