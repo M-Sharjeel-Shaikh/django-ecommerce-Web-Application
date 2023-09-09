@@ -1,7 +1,9 @@
 # Create your models here.
 from django.db import models
 import uuid
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+
+# from customer.models import Customer
 from .util import unique_slug_generator
 from ckeditor.fields import RichTextField
 
@@ -24,6 +26,7 @@ class BaseModel(models.Model):
 class Seller(models.Model):
     name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return self.name
     
@@ -139,10 +142,11 @@ RATE_CHOICES = [
 ]
 
 
+from customer.models import Customer
 class Review(models.Model):
-  user = models.ForeignKey(User, on_delete=models.CASCADE)
-  product = models.ForeignKey(Product, related_name='reviews', on_delete=models.CASCADE)
-  created_at = models.DateTimeField(auto_now_add=True)
-  comment = models.TextField(max_length=500)
-  rate = models.IntegerField(default=0, validators=[MaxValueValidator(5), MinValueValidator(0)])
+    user = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name='reviews', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    comment = models.TextField(max_length=500)
+    rate = models.IntegerField(validators=[MaxValueValidator(5), MinValueValidator(0)],null=True , blank=True)
 

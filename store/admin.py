@@ -41,6 +41,6 @@ admin.site.register(Coupon,CouponAdmin)
 
 @admin.register(Review)
 class SizeVariantAdmin(admin.ModelAdmin):
-    list_display = ['product' , 'rate']
+    list_display = ['product' , 'rate', 'comment']
 
     model = Review

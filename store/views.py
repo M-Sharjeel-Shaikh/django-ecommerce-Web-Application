@@ -8,7 +8,7 @@ from django.db.models import Avg
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib import auth
-from django.template.response import TemplateResponse
+# from django.template.response import TemplateResponse
 
 
 # ====== filter price one not working
@@ -98,330 +98,55 @@ def checkout(request):
 
 
 
-def comment(request, slug):
+def comment(request, uid):
     try:
-        if request.method == "POST":
-            user = request.user.id
-            print("user id: " )
-            print(user)
-            msg = request.POST['message']
-            username = request.POST['username']
-            product = Product.objects.get(slug=slug)
-            print("product name:  " )
-            print(product)
-            
-            if user:
-                user = Customer.objects.filter(id = user)
-                print("---------------------------------------------------",user)
-                
-
-            # if star1 or star2 or star3 or star4 or star5:
-            # star1 = request.POST['start1']
-            # print(star1)
-                # star2 = request.POST['start2']
-                # star3 = request.POST['start3']
-                # star4 = request.POST['start4']
-                # star5 = request.POST['start5']
-                # star_list=[star1,star2,star3,star4,star5]
-
-                # print("################")
-                # star = max(star_list)
-            
-            reviews = Review.objects.create(
-                user = product,
-                # rate = star,
-                rate = 3,
-                product = user,
-                comment = msg,
-            )
-            print("################")
-            print(reviews)
-            print("################")
-            reviews.save()
-            return redirect('/checkout')
-        else:
+        if request.method != "POST":
             return redirect('/shop')
+        
+        user = auth.get_user(request)
+        customer = Customer.objects.get(user= user)
+        message = request.POST['message']
+        product = Product.objects.get(uid = uid)
+        review = Review.objects.create(user = customer, product = product, comment = message)
+        review.save()
+        return detail(request, uid)
+
     except Exception as e:
         print(e)
-        return HttpResponse("someThing Wroung ")
+        return HttpResponse("someThing Wroung ", e)
 
 
 
 def detail(request, uid):
-    # try:
-    product = Product.objects.get(uid = uid)
-    sizes_variant = product.size_variant.all()
-    color_variant = product.color_variant.all()
-    # reviews = Review.objects.filter(product__slug=slug).order_by("-comment")
-    # average=0
-    # if reviews:
-    #     average = reviews.aggregate(Avg("rate"))["rate__avg"]
+    try:
+        product = Product.objects.get(uid = uid)
+        sizes_variant = product.size_variant.all()
+        color_variant = product.color_variant.all()
+        reviews = Review.objects.filter(product__uid=uid).order_by("-created_at")[:5]
 
-    # average = 0 if average is None else round(average,2)
+        # average=0
+        # if reviews:
+        #     average = reviews.aggregate(Avg("rate"))["rate__avg"]
 
-    context={
-        "product":product,
-        # "reviews":reviews,
-        # "average":average,
-        "sizes" : sizes_variant,
-        "colors" : color_variant,
-    }
+        # average = 0 if average is None else round(average,2)
 
-    return render(request, "detail.html", context)
-    # except Exception as e:
-    #     print(e)
-    #     return render(request, "shop.html")
+        context={
+            "product":product,
+            "reviews":reviews,
+            # "average":average,
+            "sizes" : sizes_variant,
+            "colors" : color_variant,
+        }
+
+        return render(request, "detail.html", context)
+    except Exception as e:
+        print(e)
+        return render(request, "shop.html")
 
 
 
 def shop(request):
-    # query_context=[]
-    context = []
     total_no_product = Product.objects.all().count()
-
-    # if 'price_form' in request.GET:
-    #     # try:
-    #     one = request.GET.get('price_range_first')
-    #     two = request.GET.get('price_range_second')
-    #     three = request.GET.get('price_range_third')
-    #     four = request.GET.get('price_range_fourth')
-    #     five = request.GET.get('price_range_fifth')
-
-    #     if one:
-    #         products = Product.objects.filter( (Q(price__lte = 100) & Q(price__gte = 0)) & (Q(discount_price__gte = 0) & Q(discount_price__lte = 100) | Q(discount_price = 0)) ).order_by('-rating')
-    #         print("======================",products)
-    #         first_range_no_product = products.count()
-            
-    #         paginator=Paginator(products,6)
-    #         page_number=request.GET.get('page')
-    #         # ======= which connect page connect and pagination =======
-    #         page_data=paginator.get_page(page_number)
-    #         total=page_data.paginator.num_pages
-
-    #         context = {
-    #             'url': 'shop',
-    #             'total_product':page_data,
-    #             'totalpage':[n+1 for n in range(total)],
-    #             'total_no_product' : total_no_product,          
-    #             'first_range_no_product':first_range_no_product,
-    #         }
-    #         return render(request, "shop.html", context)
-
-    #     if two:
-    #         products = Product.objects.filter( (Q(price__lte = 200) & Q(price__gte = 100)) & (Q(discount_price__gte = 100) & Q(discount_price__lte = 200) | Q(discount_price = 0)) ).order_by('-rating')
-    #         second_range_no_product = products.count()
-    #         context.append({
-    #             'total_product': products,
-    #             'second_range_no_product': second_range_no_product
-    #         })
-     
-        
-    #     if three:
-    #         products = Product.objects.filter( Q(price__lte = 300) & Q(price__gte = 200) & (Q(discount_price__gte = 200) & Q(discount_price__lte = 300) | Q(discount_price = 0)) ).order_by('-rating')
-    #         third_range_no_product = products.count()
-    #         context.append({
-    #             'total_product': products,
-    #             'third_range_no_product':third_range_no_product,
-    #         })
-      
-
-    #     if four:
-    #         products = Product.objects.filter( (Q(price__lte = 400) & Q(price__gte = 300)) & (Q(discount_price__gte = 300) & Q(discount_price__lte = 400) | Q(discount_price = 0)) ).order_by('-rating')
-    #         fourth_range_no_product = products.count()
-    #         context.append({
-    #             'total_product': products,
-    #             'fourth_range_no_product': fourth_range_no_product,
-    #         })
-
-
-    #     if five:
-            # products = Product.objects.filter( Q(price__lte = 500) & Q(price__gte = 400) & ( Q(discount_price__gte = 400) & Q(discount_price__lte = 500) | Q(discount_price = 0) )  ).order_by('-rating')
-            # fifth_range_no_product = products.count()
-
-            # paginator=Paginator(products,6)
-            # page_number=request.GET.get('page')
-            # # ======= which connect page connect and pagination =======
-            # page_data=paginator.get_page(page_number)
-            # total=page_data.paginator.num_pages
-
-            # context = {
-            #     'url': 'shop',
-            #     'total_product':page_data,
-            #     'totalpage':[n+1 for n in range(total)],
-            #     'total_no_product' : total_no_product,          
-            #     'fifth_range_no_product':fifth_range_no_product,
-            # }
-            # return render(request, "shop.html", context)
-
-
-    # paginator=Paginator(products,6)
-    # page_number=request.GET.get('page')
-    # # ======= which connect page connect and pagination =======
-    # page_data=paginator.get_page(page_number)
-    # total=page_data.paginator.num_pages
-
-    # context = {
-    #     'url': 'shop',
-    #     'total_product':page_data,
-    #     'totalpage':[n+1 for n in range(total)],
-    #     'total_no_product' : total_no_product,          
-    #     'fifth_range_no_product':fifth_range_no_product,
-    # }
-    # return render(request, "shop.html", context)
-    
-        # except Exception as e:
-        #     print(e)
-        #     return redirect("/contact")
-
-
-    # if 'color_form' in request.GET:
-    #     try:
-    #         black_color = request.GET.get('Black')
-    #         White_color = request.GET.get('White')
-    #         red_color = request.GET.get('Red')
-    #         blue_color = request.GET.get('Blue')
-    #         green_color = request.GET.get('Green')
-
-    #         # # product = Product.objects.all()
-    #         # black_color_id = ColorVariant.objects.get(color_name= "Black")
-    #         # black_color_id = ColorVariant.objects.get(color_name= "Black")
-    #         # black_color_id = ColorVariant.objects.get(color_name= "Black")
-    #         # black_color_id = ColorVariant.objects.get(color_name= "Black")
-    #         # print("======== color id", black_color_id)
-    #         # black = Product.objects.filter(color_variant = black_color_id)
-                
-    #         # print("===== Black", black)
-            
-    #         if black_color:
-    #             black_color_id = ColorVariant.objects.get(color_name= "Black")
-    #             black = Product.objects.filter(color_variant = black_color_id)
-    #             total= black.count()
-    #             context = {
-    #                 'total_product': black,
-    #                 'total_black_products': total,
-    #             }
-    #             return render(request, "shop.html", context)
-            
-
-    #         if White_color:
-    #             white_color_id = ColorVariant.objects.get(color_name= "White")
-    #             white = Product.objects.filter(color_variant = white_color_id)
-    #             total= white.count()
-    #             context = {
-    #                 'total_product': white,
-    #                 'total_white_products': total,
-    #             }
-    #             return render(request, "shop.html", context)
-            
-
-    #         if red_color:
-    #             red_color_id = ColorVariant.objects.get(color_name= "Red")
-    #             red = Product.objects.filter(color_variant = red_color_id)
-    #             total= red.count()
-    #             context = {
-    #                 'total_product': red,
-    #                 'total_red_products': total,
-    #             }
-    #             return render(request, "shop.html", context)
-            
-
-    #         if blue_color:
-    #             blue_color_id = ColorVariant.objects.get(color_name= "Blue")
-    #             blue = Product.objects.filter(color_variant = blue_color_id)
-    #             total= blue.count()
-    #             context = {
-    #                 'total_product': blue,
-    #                 'total_blue_products': total,
-    #             }
-    #             return render(request, "shop.html", context)
-            
-
-    #         if green_color:
-    #             green_color_id = ColorVariant.objects.get(color_name= "Green")
-    #             green = Product.objects.filter(color_variant = green_color_id)
-    #             total= green.count()
-    #             context = {
-    #                 'total_product': green,
-    #                 'total_green_products': total,
-    #             }
-    #             return render(request, "shop.html", context)
-
-    #     except Exception as e:
-    #         print(e)
-    #         return redirect("/shop")
-
-
-    # if 'size_form' in request.GET:
-    #     try:
-    #         size_x_small = request.GET.get('XS')
-    #         size_small = request.GET.get('S')
-    #         size_medium = request.GET.get('M')
-    #         size_large = request.GET.get('L')
-    #         size_x_large = request.GET.get('XL')
-
-    #         if size_x_small:
-    #             xs_size_id = SizeVariant.objects.get(size_name = "XS")
-    #             xs_size = Product.objects.filter(size_variant = xs_size_id) 
-    #             total= xs_size.count()           
-    
-    #             context = {
-    #                 'total_product': xs_size,
-    #                 'total_xs_products': total,
-    #             }
-    #             return render(request, "shop.html", context)
-
-
-    #         if size_small:
-    #             small_size_id = SizeVariant.objects.get(size_name = "S")
-    #             s_size = Product.objects.filter(size_variant = small_size_id) 
-    #             total= s_size.count()           
-    
-    #             context = {
-    #                 'total_product': s_size,
-    #                 'total_small_products': total,
-    #             }
-    #             return render(request, "shop.html", context)
-
-
-    #         if size_medium:
-    #             m_size_id = SizeVariant.objects.get(size_name = "M")
-    #             m_size = Product.objects.filter(size_variant = m_size_id) 
-    #             total= m_size.count()           
-    
-    #             context = {
-    #                 'total_product': m_size,
-    #                 'total_medium_products': total,
-    #             }
-    #             return render(request, "shop.html", context)
-
-
-    #         if size_large:
-    #             l_size_id = SizeVariant.objects.get(size_name = "L")
-    #             l_size = Product.objects.filter(size_variant = l_size_id) 
-    #             total= l_size.count()           
-    
-    #             context = {
-    #                 'total_product': l_size,
-    #                 'total_large_products': total,
-    #             }
-    #             return render(request, "shop.html", context)
-
-
-    #         if size_x_large:
-    #             xl_size_id = SizeVariant.objects.get(size_name = "XL")
-    #             xl_size = Product.objects.filter(size_variant = xl_size_id) 
-    #             total= xl_size.count()           
-    
-    #             context = {
-    #                 'total_product': xl_size,
-    #                 'total_xlarge_products': total,
-    #             }
-    #             return render(request, "shop.html", context)
-
-    #     except Exception as e:
-    #         print(e)
-    #         return redirect('/shop')
-
 
     # =========== Shop Data unfilter ============
     shop_products = Product.objects.all().order_by('-rating')
@@ -441,7 +166,7 @@ def shop(request):
     return render(request, "shop.html", context)
 
 
-# ======== Search Query =========
+# =========================== Search Query ==================================
 def search(request):
     search_query = request.GET.get('search')
     if search_query == "":
@@ -454,96 +179,8 @@ def search(request):
         return render(request, "query.html")
     
     return render(request, "query.html", context={"total_product": result})
- 
 
-# =========================== Filter Option =================================
-def price_filter(request):
-    # try:
-    total_no_product = Product.objects.all().count()
-
-    one = request.GET.get('price_range_first')
-    two = request.GET.get('price_range_second')
-    three = request.GET.get('price_range_third')
-    four = request.GET.get('price_range_fourth')
-    five = request.GET.get('price_range_fifth')
-
-    if one:
-        total_products = Product.objects.filter( (Q(price__lte = 100) & Q(price__gte = 0)) & (Q(discount_price__gte = 0) & Q(discount_price__lte = 100) | Q(discount_price = 0)) ).order_by('-rating')
-        first_range_no_product = total_products.count()
-        
-        paginator=Paginator(total_products,2)
-        page_number=request.GET.get('page')
-        # ======= which connect page connect and pagination =======
-        page_data=paginator.get_page(page_number)
-        total=page_data.paginator.num_pages
-
-        context = {
-            'url':'price_filter/?price_range_first=on',
-            'total_product':page_data,
-            'totalpage':[n+1 for n in range(total)],
-            'first_range_no_product':first_range_no_product,
-            'total_no_product' : total_no_product,
-        }
-        return render(request, "shop.html", context)
-
-
-        # if two:
-        #     products = Product.objects.filter( (Q(price__lte = 200) & Q(price__gte = 100)) & (Q(discount_price__gte = 100) & Q(discount_price__lte = 200) | Q(discount_price = 0)) ).order_by('-rating')
-        #     second_range_no_product = products.count()
-        #     context.append({
-        #         'total_product': products,
-        #         'second_range_no_product': second_range_no_product
-        #     })
-        
-        
-        # if three:
-        #     products = Product.objects.filter( Q(price__lte = 300) & Q(price__gte = 200) & (Q(discount_price__gte = 200) & Q(discount_price__lte = 300) | Q(discount_price = 0)) ).order_by('-rating')
-        #     third_range_no_product = products.count()
-        #     context.append({
-        #         'total_product': products,
-        #         'third_range_no_product':third_range_no_product,
-        #     })
-        
-
-        # if four:
-        #     products = Product.objects.filter( (Q(price__lte = 400) & Q(price__gte = 300)) & (Q(discount_price__gte = 300) & Q(discount_price__lte = 400) | Q(discount_price = 0)) ).order_by('-rating')
-        #     fourth_range_no_product = products.count()
-        #     context.append({
-        #         'total_product': products,
-        #         'fourth_range_no_product': fourth_range_no_product,
-        #     })
-
-
-        # if five:
-            # products = Product.objects.filter( Q(price__lte = 500) & Q(price__gte = 400) & ( Q(discount_price__gte = 400) & Q(discount_price__lte = 500) | Q(discount_price = 0) )  ).order_by('-rating')
-            # fifth_range_no_product = products.count()
-
-            # paginator=Paginator(products,6)
-            # page_number=request.GET.get('page')
-            # # ======= which connect page connect and pagination =======
-            # page_data=paginator.get_page(page_number)
-            # total=page_data.paginator.num_pages
-
-            # context = {
-            #     'url': 'shop',
-            #     'total_product':page_data,
-            #     'totalpage':[n+1 for n in range(total)],
-            #     'total_no_product' : total_no_product,          
-            #     'fifth_range_no_product':fifth_range_no_product,
-            # }
-            # return render(request, "shop.html", context)
-
-    return redirect('/shop')
-
-
-    # except Exception as e:
-    #     print("======= error: ",e)
-    #     return redirect('/contact')
-
-
-
-
-# =========================== End Filter Option =============================
+# =========================== END Search Query ==============================
 
 
 # =========================== Favourite & Cart ==============================
@@ -852,3 +489,4 @@ def shoes(request):
     except Exception as e:
         print(e)
         return render(request, "index.html")
+# =========================== End Category Views =============================

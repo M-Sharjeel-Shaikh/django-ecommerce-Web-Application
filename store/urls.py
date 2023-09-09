@@ -9,12 +9,12 @@ urlpatterns = [
     path('detail/<uid>', detail, name="detail"),
     path('about/', TemplateView.as_view(template_name='about.html'), name='about'),
     path('query/', TemplateView.as_view(template_name='query.html'), name='query'),
+    path('error/', TemplateView.as_view(template_name='error.html'), name='error'),
     path('search/', search, name="search"),
-    path('comment/<slug>', comment, name="comment"),
+    path('comment/<uid>', comment, name="comment"),
     path('shop/', shop, name="shop"),
 
     #=============== filtering shop ==================
-    path('price_filter/', price_filter, name="price_filter"),
 
     # ================== favourite & Cart ===================
     path('product/favourite/', favourite, name="favourite"),

@@ -1,3 +1,4 @@
+# from datetime import datetime
 import uuid
 from django.conf import settings
 from django.shortcuts import render, redirect
@@ -8,7 +9,8 @@ from django.contrib.auth import authenticate, login
 from django.core.mail import send_mail
 from rest_framework.response import Response
 from rest_framework import status
-
+from math import ceil
+from customer.utils import coupon
 from store.models import ColorVariant, Product, SizeVariant
 from store.views import nav
 
@@ -39,7 +41,21 @@ def create_cart(request, product_uid):
 def cart(request):
     customer = auth.get_user(request)
     cart_detail = Cart.objects.filter(user = customer).all()
-    return render(request, "cart.html", context = {"cart_detail": cart_detail})
+    total = ceil(sum(item.product.price for item in cart_detail))
+
+    context = {"cart_detail": cart_detail, "total": total}
+
+    if request.method == "POST":
+        coupon_code = request.POST.get('coupon')
+        if coupon_code:
+            response = coupon(coupon_code)
+            if response is not False:
+                messages.success(request, 'Token is Applied')
+                context['token_value'] = response.value
+            else:
+                messages.warning(request, 'Token is Expired or invalid')
+    
+    return render(request, "cart.html", context)
 
 
 def remove_cart(request, cart_uid):
@@ -65,13 +81,22 @@ def favourite_user(request):
 def remove_favourite(request, favourite_uid):
     Favourite.objects.filter(id = favourite_uid).first().delete()
     return redirect("/user/favourite")
+
+
+def checkout(request):
+    customer = auth.get_user(request)
+    cart_detail = Cart.objects.filter(user = customer).all()
+    total = ceil(sum(item.product.price for item in cart_detail))
+    context = {"cart_detail": cart_detail, "total": total}
+
+    return render(request, "checkout.html", context)
+
 # =========================== End Customer Shopping Journey ================================
 
 
 # ====================================== Authentication ======================================
-# ============= Login User ===================
+# ============= Login User =========================
 def login(request):
-    
     if request.method != "POST":
         return render(request, "login.html")
     
@@ -146,7 +171,7 @@ def sign(request):
 
 
 
-# =========== Email For Forget Password =============
+# ========== Email For Forget Password ==============
 def forget(request):
     if request.user.is_authenticated:   
         return render(request, "index.html")
@@ -177,7 +202,7 @@ def forget(request):
 
 
 
-# =========== Send Email With Uuid token ============
+# ======== Send Email With Uuid token ===============
 def send_email(email, auth_token):
     subject="your token is verifies"
     message=f'Hi User, Click link to verify your account http://127.0.0.1:8000/verify/{auth_token}'
@@ -278,7 +303,7 @@ def send_email_forget_password(email, auth_token):
     send_mail(subject,message, email_from,recepient_list)
 
 
-# =========================== API Authentication =================================
+# # =========================== API Authentication =================================
 def Apilogin(request):
     return Response(status=status.HTTP_201_CREATED)
 
