@@ -82,6 +82,7 @@ def home(request):
     return render(request, "index.html",context)
 
 
+
 def nav(request):
     try:
         customer = auth.get_user(request)
@@ -90,11 +91,6 @@ def nav(request):
     except Exception as e:
         print(e)
         return redirect('/')
-
-
-
-def checkout(request):
-    return render(request, "checkout.html")
 
 
 
@@ -186,7 +182,7 @@ def search(request):
 # =========================== Favourite & Cart ==============================
 def favourite(request, slug=None):
     try:
-        if not slug:
+        if not slug or slug is None:
             user = request.user
             customer = Customer.objects.get(user=user)
             products = Customer.objects.filter(user = customer).all()
@@ -200,10 +196,8 @@ def favourite(request, slug=None):
                 user = request.user
                 product = Product.objects.get(slug=slug)
                 my_cus = Customer.objects.get(user=user)
-                print(my_cus)
                 # favourite_instance.user = my_cus
                 favourite = Favourite.objects.create(user=my_cus, favourite=product).save()
-                print("congrate ========================", favourite)
                 return redirect('/')
             
         except Exception as e:
@@ -213,9 +207,6 @@ def favourite(request, slug=None):
     except Exception as e:
         print(e)
         return redirect('/')
-
-
-
 
 # =========================== End Favourite & Cart ===========================
 

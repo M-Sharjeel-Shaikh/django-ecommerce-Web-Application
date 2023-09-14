@@ -144,23 +144,23 @@
               <h6>Subtotal</h6>
               <h6>${{total}}</h6>
             </div>
-            {% if token_value %}
-              <div class="d-flex justify-content-between mb-3">
-                <h6>Coupon</h6>
-                <h6>-${{token_value}}</h6>
-              </div>
-            {% endif %}
             <div class="d-flex justify-content-between">
               <h6 class="font-weight-medium">Shipping</h6>
               <h6 class="font-weight-medium">$10</h6>
             </div>
+            {% if discount_value %}
+            <div class="d-flex justify-content-between mt-3 mb-3">
+              <h6>Coupon</h6>
+              <h6>-${{discount_value}}</h6>
+            </div>
+            {% endif %}
           </div>
           <div class="pt-2">
             <div class="d-flex justify-content-between mt-2">
               <h5>Total</h5>
               <h5>${{total}}</h5>
             </div>
-            <form action="{% url 'checkout' %}">
+            <form action="/user/checkout/{{customer}}">
               <button class="btn btn-block btn-primary font-weight-bold my-3 py-3">
                 Proceed To Checkout
               </button>

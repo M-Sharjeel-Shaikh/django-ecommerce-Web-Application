@@ -10,4 +10,6 @@ def coupon(coupon_code):
         if coupon and coupon.expire > utc.localize(datetime.now()):
             return coupon
     except Coupon.DoesNotExist:
-        return False
+        return None
+    except Exception as e:
+        print(e)

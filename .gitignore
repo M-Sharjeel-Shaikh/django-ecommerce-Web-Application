@@ -1,1 +1,8 @@
 db.sqlite3
+migrations/__pycache__
+customer/migrations/__pycache__
+shopping/migrations/__pycache__
+contact/migrations/__pycache__
+store/migrations/__pycache__
+__pycache__
+api/

@@ -22,9 +22,5 @@ urlpatterns = [
     path('favourite/<product_uid>', add_favourite, name='add_favourite'),
     path('remove_favourite/<favourite_uid>', remove_favourite, name='remove-favourite'),
     path('coupon/', coupon, name='coupon'),
-    path('checkout/', checkout, name='checkout'),
-
-    # =========== Customer Urls for APIs=====
-    path('Login/', Apilogin, name="Login"),
-    # path('Login/', login, name="login"),
+    path('checkout/<customer>', checkout, name='checkout'),
     ]

@@ -36,6 +36,13 @@ class Cart(models.Model):
 class Ordered(models.Model):
     orderitems = models.ManyToManyField(Cart)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    address = models.TextField(max_length=150, null=True, blank=True)
+    phone = models.CharField(max_length=15, null=True, blank=True)
+    payment_no = models.CharField(max_length=30, null=True, blank=True)
+    payment_ref = models.CharField(max_length=30, null=True, blank=True)
+    zip = models.CharField(max_length=10, null=True, blank=True)
+    email = models.EmailField(max_length=30, null=True, blank=True)
+    country = models.CharField(max_length=20, null=True, blank=True)
     is_ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 

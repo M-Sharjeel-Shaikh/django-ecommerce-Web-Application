@@ -7,8 +7,6 @@ from django.contrib import messages, auth
 from customer.models import Cart, Customer, Favourite
 from django.contrib.auth import authenticate, login
 from django.core.mail import send_mail
-from rest_framework.response import Response
-from rest_framework import status
 from math import ceil
 from customer.utils import coupon
 from store.models import ColorVariant, Product, SizeVariant
@@ -42,16 +40,15 @@ def cart(request):
     customer = auth.get_user(request)
     cart_detail = Cart.objects.filter(user = customer).all()
     total = ceil(sum(item.product.price for item in cart_detail))
-
-    context = {"cart_detail": cart_detail, "total": total}
+    context = {"cart_detail": cart_detail, "total": total, 'customer': customer.id}
 
     if request.method == "POST":
         coupon_code = request.POST.get('coupon')
         if coupon_code:
             response = coupon(coupon_code)
-            if response is not False:
+            if response is not None:
                 messages.success(request, 'Token is Applied')
-                context['token_value'] = response.value
+                context['discount_value'] = response.value
             else:
                 messages.warning(request, 'Token is Expired or invalid')
     
@@ -83,12 +80,10 @@ def remove_favourite(request, favourite_uid):
     return redirect("/user/favourite")
 
 
-def checkout(request):
-    customer = auth.get_user(request)
+def checkout(request, customer):
     cart_detail = Cart.objects.filter(user = customer).all()
     total = ceil(sum(item.product.price for item in cart_detail))
     context = {"cart_detail": cart_detail, "total": total}
-
     return render(request, "checkout.html", context)
 
 # =========================== End Customer Shopping Journey ================================
@@ -301,12 +296,4 @@ def send_email_forget_password(email, auth_token):
     recepient_list = [email]
 
     send_mail(subject,message, email_from,recepient_list)
-
-
-# # =========================== API Authentication =================================
-def Apilogin(request):
-    return Response(status=status.HTTP_201_CREATED)
-
-
-
-
+    

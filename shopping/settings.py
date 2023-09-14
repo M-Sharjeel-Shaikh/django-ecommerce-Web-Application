@@ -31,9 +31,7 @@ INSTALLED_APPS = [
     'store',
     'customer',
     'contact',
-    'rest_framework',
     'ckeditor',
-    # 'api',
 
 ]
 
