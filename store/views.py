@@ -137,7 +137,7 @@ def detail(request, uid):
         return render(request, "detail.html", context)
     except Exception as e:
         print(e)
-        return render(request, "shop.html")
+        return render(request, "index.html")
 
 
 
@@ -196,7 +196,6 @@ def favourite(request, slug=None):
                 user = request.user
                 product = Product.objects.get(slug=slug)
                 my_cus = Customer.objects.get(user=user)
-                # favourite_instance.user = my_cus
                 favourite = Favourite.objects.create(user=my_cus, favourite=product).save()
                 return redirect('/')
             
@@ -230,7 +229,7 @@ def men(request):
             'total_product':page_data,
             'totalpage':[n+1 for n in range(total)],
         }
-        return render(request, "shop.html", context)
+        return render(request, "category.html", context)
     except Exception as e:
         print(e)
         return render(request, "index.html")
@@ -251,7 +250,7 @@ def women(request):
             'total_product':page_data,
             'totalpage':[n+1 for n in range(total)],
         }
-        return render(request, "shop.html", context)
+        return render(request, "category.html", context)
     except Exception as e:
         print(e)
         return render(request, "index.html")
@@ -272,11 +271,11 @@ def kid(request):
             'total_product':page_data,
             'totalpage':[n+1 for n in range(total)],
         }
-        return render(request, "shop.html", context)
+        return render(request, "category.html", context)
     except Exception as e:
         print("==================== Exception ==================")
         print(e)
-        return render(request, "shop.html")
+        return render(request, "index.html")
 
 
 def shirt(request):
@@ -296,7 +295,7 @@ def shirt(request):
             'total_product':page_data,
             'totalpage':[n+1 for n in range(total)],
         }
-        return render(request, "shop.html", context)
+        return render(request, "category.html", context)
     except Exception as e:
         print(e)
         return render(request, "index.html")
@@ -319,7 +318,7 @@ def jeans(request):
             'total_product':page_data,
             'totalpage':[n+1 for n in range(total)],
         }
-        return render(request, "shop.html", context)
+        return render(request, "category.html", context)
     except Exception as e:
         print(e)
         return render(request, "index.html")
@@ -342,7 +341,7 @@ def furniture(request):
             'total_product':page_data,
             'totalpage':[n+1 for n in range(total)],
         }
-        return render(request, "shop.html", context)
+        return render(request, "category.html", context)
     except Exception as e:
         print(e)
         return render(request, "index.html")
@@ -365,7 +364,7 @@ def digital(request):
             'total_product':page_data,
             'totalpage':[n+1 for n in range(total)],
         }
-        return render(request, "shop.html", context)
+        return render(request, "category.html", context)
     except Exception as e:
         print(e)
         return render(request, "index.html")
@@ -388,7 +387,7 @@ def watch(request):
             'total_product':page_data,
             'totalpage':[n+1 for n in range(total)],
         }
-        return render(request, "shop.html", context)
+        return render(request, "category.html", context)
     except Exception as e:
         print(e)
         return render(request, "index.html")
@@ -410,7 +409,7 @@ def household(request):
             'total_product':page_data,
             'totalpage':[n+1 for n in range(total)],
         }
-        return render(request, "shop.html", context)
+        return render(request, "category.html", context)
     except Exception as e:
         print(e)
         return render(request, "index.html")
@@ -432,7 +431,7 @@ def cosmetic(request):
             'total_product':page_data,
             'totalpage':[n+1 for n in range(total)],
         }
-        return render(request, "shop.html", context)
+        return render(request, "category.html", context)
     except Exception as e:
         print(e)
         return render(request, "index.html")
@@ -454,7 +453,7 @@ def jacket(request):
             'total_product':page_data,
             'totalpage':[n+1 for n in range(total)],
         }
-        return render(request, "shop.html", context)
+        return render(request, "category.html", context)
     except Exception as e:
         print(e)
         return render(request, "index.html")
@@ -476,7 +475,7 @@ def shoes(request):
             'total_product':page_data,
             'totalpage':[n+1 for n in range(total)],
         }
-        return render(request, "shop.html", context)
+        return render(request, "category.html", context)
     except Exception as e:
         print(e)
         return render(request, "index.html")
