@@ -11,7 +11,7 @@
                 <nav class="breadcrumb bg-light mb-30">
                     <a class="breadcrumb-item text-dark" href="{% url 'home' %}">Home</a>
                     <a class="breadcrumb-item text-dark" href="{% url 'shop' %}">Shop</a>
-                    <span class="breadcrumb-item active">Shop List</span>
+                    <span class="breadcrumb-item active" >Shop List</span>
                 </nav>
             </div>
         </div>
@@ -27,7 +27,6 @@
                 <!-- Price Start -->
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by price</span></h5>
                 <div class="bg-light p-4 mb-30">
-                    
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <h5 class="text-muted m-1">All Price</h5>
                             <span class="badge border font-weight-normal">{{total_no_product}}</span>
@@ -57,10 +56,10 @@
                             <label class="custom-control-label" for="price-5">$400 - $500</label>
                             <span class="badge border font-weight-normal">0</span>
                         </div>
-                        {% comment %} <br><div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <button class ="btn btn-sm btn-dark" type="submit">Filter</button>
+                        <br><div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <button class ="btn btn-sm btn-dark" id="myButton" onclick = "fun()" type="submit">Filter</button>
                             <button class ="btn btn-sm btn-dark" type="submit">clear All</button>
-                        </div> {% endcomment %}
+                        </div>
                  
                 </div>
                 <!-- Price End -->
@@ -175,9 +174,8 @@
                             </div>
                         </div>
                     </div>
-                    
-                    {% if shop_product %}
-                        {% for item in shop_product %}
+                    {% if total_product %}
+                        {% for item in total_product %}
                             <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
                                 <div class="product-item bg-light mb-4">
                                     <div class="product-img position-relative overflow-hidden">
@@ -213,12 +211,12 @@
                         {% endfor %}
                     {% endif %}
                 
-                    {% if shop_product %}
+                    {% if total_product %}
                         <div class="col-12">
                             <nav>
                             <ul class="pagination justify-content-center">
-                                {% if shop_product.has_previous %}
-                                    <li class="page-item "><a class="page-link" href="/shop?page={{shop_product.previous_page_number}}">Previous</span></a></li>
+                                {% if total_product.has_previous %}
+                                    <li class="page-item "><a class="page-link" href="/shop?page={{total_product.previous_page_number}}">Previous</span></a></li>
                                 {% endif %}
 
 
@@ -227,14 +225,14 @@
                                 {% endfor %}
 
 
-                                {% if shop_product.has_next %}
-                                    <li class="page-item"><a class="page-link" href="/shop?page={{shop_product.next_page_number}}">Next</a></li>
+                                {% if total_product.has_next %}
+                                    <li class="page-item"><a class="page-link" href="/shop?page={{total_product.next_page_number}}">Next</a></li>
                                 {% endif %}
                             </ul>
                             </nav>
                         </div>
                     {% endif %}
-                    
+                         
                 </div>
             <!-- Shop Product End -->
         </div>

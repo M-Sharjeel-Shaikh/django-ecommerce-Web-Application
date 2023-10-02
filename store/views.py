@@ -8,6 +8,7 @@ from django.db.models import Avg
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib import auth
+from django.http import JsonResponse
 
 from store.util import shop_pagination
 # from django.template.response import TemplateResponse
@@ -142,43 +143,39 @@ def detail(request, uid):
 
 
 def shop(request):
-    total_no_product = Product.objects.all().count()
-
-    # =========== Shop Data unfilter ============
     shop_products = Product.objects.all().order_by('-rating')
-
-    paginator = Paginator(shop_products, 6)
-    page_number = request.GET.get('page')
-    # ======= which connect page connect and pagination =======
-    page_data = paginator.get_page(page_number)
-    total = page_data.paginator.num_pages
-    print("-------------------------------", shop_products)
-
-    context = {
-        'response': shop_products,
-        'shop_product': page_data,
-        'totalpage': [n+1 for n in range(total)],
-        'total_no_product': total_no_product,
-    }
-
+    context = shop_pagination(request, shop_products)
+    total_no_product = shop_products.count()
+    context['response'] = shop_products
+    context['total_no_product'] = total_no_product
     return render(request, "shop.html", context)
 
 
 # =========================== Search Query ==================================
 def search(request):
     search_query = request.GET.get('search')
-    if search_query == "":
-        return redirect('/shop')
+    result_query = []
+    if search_query is not None:
+        if search_query == "":
+            return redirect('/shop')
 
-    result = Product.objects.filter(
-        name__icontains=search_query).order_by('-rating')[:10]
+        result_query = Product.objects.filter(name__icontains=search_query).order_by('-rating')[:100]
 
-    if not result:
-        messages.info(request, "No Data Found")
-        return render(request, "query.html")
+        if not result_query:
+            messages.info(request, "No Data Found")
+            return render(request, "query.html")
+        
+        context={"total_product": result_query}
+        return render(request, "query.html", context)
+    
+    pagination_query = query(request, result_query)
+    print(pagination_query,"-----------------------")
+    context={"total_product": pagination_query}
+    return render(request, "query.html", context)
 
-    return render(request, "query.html", context={"total_product": result})
 
+def query(request, query):
+    return shop_pagination(request, query)
 # =========================== END Search Query ==============================
 
 
