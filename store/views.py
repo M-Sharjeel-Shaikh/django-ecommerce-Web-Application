@@ -9,6 +9,8 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib import auth
 from django.http import JsonResponse
+from store.serializers import ProductSerializer
+
 
 from store.util import shop_pagination
 # from django.template.response import TemplateResponse
@@ -102,7 +104,7 @@ def comment(request, uid):
 
         user = auth.get_user(request)
         customer = Customer.objects.get(user=user)
-        message = request.POST['message']
+        message = request.POST.get('message')
         product = Product.objects.get(uid=uid)
         review = Review.objects.create(
             user=customer, product=product, comment=message)
@@ -155,23 +157,36 @@ def shop(request):
 def search(request):
     search_query = request.GET.get('search')
     result_query = []
-    if search_query is not None:
-        if search_query == "":
-            return redirect('/shop')
+    if search_query == "" or search_query is None:
+        return redirect('/shop')
 
-        result_query = Product.objects.filter(name__icontains=search_query).order_by('-rating')[:100]
+    result_query = Product.objects.filter(name__icontains=search_query).order_by('-rating')[:100]
 
-        if not result_query:
-            messages.info(request, "No Data Found")
-            return render(request, "query.html")
-        
-        context={"total_product": result_query}
-        return render(request, "query.html", context)
+    if not result_query:
+        messages.info(request, "No Data Found")
+        return render(request, "query.html")
     
-    pagination_query = query(request, result_query)
-    print(pagination_query,"-----------------------")
-    context={"total_product": pagination_query}
-    return render(request, "query.html", context)
+    serializer = ProductSerializer(result_query, many=True)
+
+    # context = shop_pagination(request, result_query)
+
+    return JsonResponse(serializer.data, safe=False)
+
+
+# def search(request):
+#     search_query = request.GET.get('search')
+#     result_query = []
+#     if search_query == "" or search_query is None:
+#         return redirect('/shop')
+
+#     result_query = Product.objects.filter(name__icontains=search_query).order_by('-rating')[:100]
+
+#     if not result_query:
+#         messages.info(request, "No Data Found")
+#         return render(request, "query.html")
+
+#     context = shop_pagination(request, result_query)
+#     return render(request, "query.html", context)
 
 
 def query(request, query):
@@ -208,10 +223,10 @@ def favourite(request, slug=None):
         print(e)
         return redirect('/')
 
-# =========================== End Favourite & Cart ===========================
+# =========================== End Favourite & Cart ==========================
 
 
-# =========================== Category Views =================================
+# =========================== Category Views ================================
 
 def men(request):
     try:

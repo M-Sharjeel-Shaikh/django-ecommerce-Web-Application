@@ -83,18 +83,18 @@
                         <div class="d-flex align-items-center mb-4 pt-2">
                             <div class="input-group quantity mr-3" style="width: 130px;">
                                 <div class="input-group-btn">
-                                    <button class="btn btn-primary btn-minus">
+                                    <a class="btn btn-primary btn-minus" id="decrement">
                                         <i class="fa fa-minus"></i>
-                                    </button>
+                                    </a>
                                 </div>
-                                <input type="text" class="form-control bg-secondary border-0 text-center" value="1" name="quantity">
+                                <input type="text" id="quantity" class="form-control bg-secondary border-0 text-center" value="1" name="quantity">
                                 <div class="input-group-btn">
-                                    <button class="btn btn-primary btn-plus">
+                                    <a class="btn btn-primary btn-plus" id="increment">
                                         <i class="fa fa-plus"></i>
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
-                            <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To
+                            <button type="submit" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To
                                 Cart</button>
                         </div>
                     </form>
@@ -199,7 +199,7 @@
                 <div class="owl-carousel related-carousel">
                     <div class="product-item bg-light">
                         <div class="product-img position-relative overflow-hidden">
-                            <img class="img-fluid w-100" src="img/product-1.jpg" alt="">
+                            <img class="img-fluid w-100" src="static/img/product-1.jpg" alt="">
                             <div class="product-action">
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
@@ -327,6 +327,13 @@
         </div>
     </div>
     <!-- Products End -->
+    <script>
+        document.getElementById('increment').onclick = set_qty;
+        function set_qty(){
+            incre = document.getElementById('quantity').value++;
+            document.getElementById('quantity').value.innerHTML = incre;
+        }
+    </script>
 
 </body>
 

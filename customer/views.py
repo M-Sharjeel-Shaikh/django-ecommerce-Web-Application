@@ -38,22 +38,23 @@ def create_cart(request, product_uid):
 
 def cart(request):
     customer = auth.get_user(request)
-    cart_detail = Cart.objects.filter(user = customer).all()
-    total = ceil(sum(item.product.price for item in cart_detail))
-    context = {"cart_detail": cart_detail, "total": total, 'customer': customer.id}
+    if customer.id is not None:
+        cart_detail = Cart.objects.filter(user = customer)
+        total = ceil(sum(item.product.price for item in cart_detail))
+        context = {"cart_detail": cart_detail, "total": total, 'customer': customer.id}
 
-    if request.method == "POST":
-        coupon_code = request.POST.get('coupon')
-        if coupon_code:
-            response = coupon(coupon_code)
-            if response is not None:
-                messages.success(request, 'Token is Applied')
-                context['discount_value'] = response.value
-            else:
-                messages.warning(request, 'Token is Expired or invalid')
-    
-    return render(request, "cart.html", context)
-
+        if request.method == "POST":
+            coupon_code = request.POST.get('coupon')
+            if coupon_code:
+                response = coupon(coupon_code)
+                if response is not None:
+                    messages.success(request, 'Token is Applied')
+                    context['discount_value'] = response.value
+                else:
+                    messages.warning(request, 'Token is Expired or invalid')
+        
+        return render(request, "cart.html", context)
+    return render(request, "error.html")
 
 def remove_cart(request, cart_uid):
     Cart.objects.filter(id = cart_uid).first().delete()

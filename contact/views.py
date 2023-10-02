@@ -2,10 +2,6 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
 from contact.models import Contact
-from rest_framework import status
-from rest_framework.decorators import api_view
-from .serializers import ContactSerializer
-from rest_framework.response import Response
 
 # Create your views here.
 def contact(request):
@@ -27,17 +23,6 @@ def contact(request):
         return redirect('/shop/contact')
     
     except Exception as e:      
-        return HttpResponse("there is something wroung", e)
-
-
-@api_view(['POST'])
-def ApiContact(request):
-    contact = ContactSerializer(data=request.data)
-
-    if contact.is_valid():
-        contact.save()
-        content = {'message': 'contact is created'}
-        return Response(content, status=status.HTTP_201_CREATED)
-    else:
-        return Response(status=400)
+        messages.success(request, 'Fill all required Fields')
+        return render(request, "error.html")
         

@@ -7,10 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('store.urls')),
     path('shop/', include('contact.urls')),
-    path('user/', include('customer.urls')),          
-    # Api Collection For Ecommerce
-    # path('api/user/', include('customer.urls')),  
-            
+    path('user/', include('customer.urls')),           
 ]
 
 if settings.DEBUG:
