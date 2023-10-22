@@ -121,8 +121,7 @@ def detail(request, uid):
         product = Product.objects.get(uid=uid)
         sizes_variant = product.size_variant.all()
         color_variant = product.color_variant.all()
-        reviews = Review.objects.filter(
-            product__uid=uid).order_by("-created_at")[:5]
+        reviews = Review.objects.filter(product__uid=uid).order_by("-created_at")[:5]
 
         # average=0
         # if reviews:
@@ -141,7 +140,7 @@ def detail(request, uid):
         return render(request, "detail.html", context)
     except Exception as e:
         print(e)
-        return render(request, "index.html")
+        return render(request, "error.html")
 
 
 def shop(request):

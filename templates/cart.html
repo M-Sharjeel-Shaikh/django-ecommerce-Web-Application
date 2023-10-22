@@ -33,47 +33,15 @@
             </thead>
             <tbody class="align-middle">
                 <tr>
-                <td class="align-middle">
-                    <img
-                    src="/static/img/product-1.jpg"
-                    alt=""
-                    style="width: 50px"
-                    />
-                    Product Name
-                </td>
-                <td class="align-middle">$150</td>
-                <td class="align-middle">
-                    <div class="input-group quantity mx-auto" style="width: 100px">
-                    <div class="input-group-btn">
-                        <button class="btn btn-sm btn-primary btn-minus">
-                        <i class="fa fa-minus"></i>
-                        </button>
-                    </div>
-                    <input
-                        type="text"
-                        class="form-control form-control-sm bg-secondary border-0 text-center"
-                        value="1"/>
-                    <div class="input-group-btn">
-                        <button class="btn btn-sm btn-primary btn-plus">
-                        <i class="fa fa-plus"></i>
-                        </button>
-                    </div>
-                    </div>
-                </td>
-                <td class="align-middle">Variant</td>
-                <td class="align-middle">$150</td>
-                <td class="align-middle">
-                    <button class="btn btn-sm btn-danger">
-                    <i class="fa fa-times"></i>
-                    </button>
-                </td>
-                </tr>
-            {% for item in cart_detail %}
-              <tr>
                   <td class="align-middle">
-                      <img src="/media/{{item.product.image}}" alt="" style="width: 50px"/>{{item.product.name}}
+                      <img
+                      src="/static/img/product-1.jpg"
+                      alt=""
+                      style="width: 50px"
+                      />
+                      Product Name
                   </td>
-                  <td class="align-middle">${{item.product.price}}</td>
+                  <td class="align-middle">$150</td>
                   <td class="align-middle">
                       <div class="input-group quantity mx-auto" style="width: 100px">
                       <div class="input-group-btn">
@@ -83,7 +51,8 @@
                       </div>
                       <input
                           type="text"
-                          class="form-control form-control-sm bg-secondary border-0 text-center" value={{item.quantity}} />
+                          class="form-control form-control-sm bg-secondary border-0 text-center"
+                          value="1"/>
                       <div class="input-group-btn">
                           <button class="btn btn-sm btn-primary btn-plus">
                           <i class="fa fa-plus"></i>
@@ -91,11 +60,44 @@
                       </div>
                       </div>
                   </td>
+                  <td class="align-middle">Variant</td>
+                  <td class="align-middle">$150</td>
+                  <td class="align-middle">
+                      <button class="btn btn-sm btn-danger">
+                      <i class="fa fa-times"></i>
+                      </button>
+                  </td>
+                </tr>
+            {% for item in cart_detail %}
+              <tr>
+                  <td class="align-middle">
+                      <img src="/media/{{item.product.image}}" alt="" style="width: 50px"/>{{item.product.name}}
+                  </td>
+                  <td class="align-middle">${{item.product.price}}</td>
+                  <td class="align-middle">
+                      <div class="input-group quantity mx-auto" style="width: 100px">
+                        <div class="input-group-btn">
+                          <form action="/user/decrement_qty/{{item.product.uid}}">
+                            <button class="btn btn-sm btn-primary btn-minus">
+                            <i class="fa fa-minus" type="submit"></i>
+                            </button>
+                            </form>
+                        </div>
+                        <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center" value={{item.quantity}} />
+                        <div class="input-group-btn">
+                          <form action="/user/increment_qty/{{item.product.uid}}">
+                            <button class="btn btn-sm btn-primary btn-plus">
+                            <i class="fa fa-plus" type="submit"></i>
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                  </td>
                   
                   {% if item.color_varient %}
                     <td class="align-middle">{{item.color_varient}} +${{item.color_varient.price}}
                       {% if item.size_varient %}
-                      /{{item.size_varient}} +${{item.size_varient.price}}
+                        /{{item.size_varient}} + ${{item.size_varient.price}}
                       {% endif %}</td>
                   {% else %}
                     <td class="align-middle">-----</td>
@@ -149,10 +151,10 @@
               <h6 class="font-weight-medium">$10</h6>
             </div>
             {% if discount_value %}
-            <div class="d-flex justify-content-between mt-3 mb-3">
-              <h6>Coupon</h6>
-              <h6>-${{discount_value}}</h6>
-            </div>
+              <div class="d-flex justify-content-between mt-3 mb-3">
+                <h6>Coupon</h6>
+                <h6>-${{discount_value}}</h6>
+              </div>
             {% endif %}
           </div>
           <div class="pt-2">

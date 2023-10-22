@@ -56,8 +56,33 @@ def cart(request):
         return render(request, "cart.html", context)
     return render(request, "error.html")
 
+
 def remove_cart(request, cart_uid):
-    Cart.objects.filter(id = cart_uid).first().delete()
+    cart_item = Cart.objects.filter(id = cart_uid).first()
+    if cart_item:
+        cart_item.delete()
+    return redirect("/user/cart")
+
+
+def increment_qty(request, product_uid):
+    customer = auth.get_user(request)
+    if customer.id is not None:
+        cart_detail = Cart.objects.filter(user = customer)
+        for item in cart_detail:
+            if str(item.product.uid) == product_uid:
+                item.quantity += 1
+                item.save()
+    return redirect("/user/cart")
+
+
+def decrement_qty(request, product_uid):
+    customer = auth.get_user(request)
+    if customer.id is not None:
+        cart_detail = Cart.objects.filter(user = customer)
+        for item in cart_detail:
+            if str(item.product.uid) == product_uid:
+                item.quantity -= 1
+                item.save()
     return redirect("/user/cart")
 
 
@@ -281,8 +306,6 @@ def verify(request, auth_token):
         customer.is_verified = True
         customer.save()
         messages.success(request, "Email is verified")
-        print("Email is verified")
-        print("Email is verified")
         return redirect('/user/login')
     except Exception as e:
         print(e)
