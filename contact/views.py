@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.contrib import messages
 from contact.models import Contact
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required
 def contact(request):
     try:
         if request.method != "POST":

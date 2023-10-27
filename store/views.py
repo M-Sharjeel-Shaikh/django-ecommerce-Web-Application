@@ -2,16 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from customer.models import *
 from store.models import *
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db.models import Avg
-from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib import auth
-from django.http import JsonResponse
-from store.serializers import ProductSerializer
-
-
+from django.contrib.auth.decorators import login_required
 from store.util import shop_pagination
 # from django.template.response import TemplateResponse
 
@@ -97,6 +92,7 @@ def nav(request):
         return redirect('/')
 
 
+@login_required
 def comment(request, uid):
     try:
         if request.method != "POST":
@@ -116,6 +112,7 @@ def comment(request, uid):
         return HttpResponse("someThing Wroung ", e)
 
 
+@login_required
 def detail(request, uid):
     try:
         product = Product.objects.get(uid=uid)
@@ -143,6 +140,7 @@ def detail(request, uid):
         return render(request, "error.html")
 
 
+@login_required
 def shop(request):
     shop_products = Product.objects.all().order_by('-rating')
     context = shop_pagination(request, shop_products)
@@ -152,48 +150,20 @@ def shop(request):
     return render(request, "shop.html", context)
 
 
+
 # =========================== Search Query ==================================
 def search(request):
-    search_query = request.GET.get('search')
-    result_query = []
-    if search_query == "" or search_query is None:
-        return redirect('/shop')
-
+    search_query = request.GET.get('query', '')
     result_query = Product.objects.filter(name__icontains=search_query).order_by('-rating')[:100]
-
-    if not result_query:
-        messages.info(request, "No Data Found")
-        return render(request, "query.html")
-    
-    serializer = ProductSerializer(result_query, many=True)
-
-    # context = shop_pagination(request, result_query)
-
-    return JsonResponse(serializer.data, safe=False)
+    context = shop_pagination(request, result_query)
+    return render(request, "query.html", context)
 
 
-# def search(request):
-#     search_query = request.GET.get('search')
-#     result_query = []
-#     if search_query == "" or search_query is None:
-#         return redirect('/shop')
-
-#     result_query = Product.objects.filter(name__icontains=search_query).order_by('-rating')[:100]
-
-#     if not result_query:
-#         messages.info(request, "No Data Found")
-#         return render(request, "query.html")
-
-#     context = shop_pagination(request, result_query)
-#     return render(request, "query.html", context)
-
-
-def query(request, query):
-    return shop_pagination(request, query)
 # =========================== END Search Query ==============================
 
 
 # =========================== Favourite & Cart ==============================
+@login_required
 def favourite(request, slug=None):
     try:
         if not slug or slug is None:
@@ -226,7 +196,7 @@ def favourite(request, slug=None):
 
 
 # =========================== Category Views ================================
-
+@login_required
 def men(request):
     try:
         men_product = Product.objects.filter(category="1").order_by('-rating')
@@ -238,6 +208,7 @@ def men(request):
         return render(request, "index.html")
 
 
+@login_required
 def women(request):
     try:
         women_product = Product.objects.filter(category="2").order_by('-rating')
@@ -249,6 +220,7 @@ def women(request):
         return render(request, "index.html")
 
 
+@login_required
 def kid(request):
     try:
         kid_product = Product.objects.filter(category="3").order_by('-rating')
@@ -260,6 +232,7 @@ def kid(request):
         return render(request, "index.html")
 
 
+@login_required
 def shirt(request):
     try:
         shirt_product = Product.objects.filter(category="4").order_by('-rating')
@@ -271,6 +244,7 @@ def shirt(request):
         return render(request, "index.html")
 
 
+@login_required
 def jeans(request):
     try:
         jeans_product = Product.objects.filter(category="5").order_by('-rating')
@@ -282,6 +256,7 @@ def jeans(request):
         return render(request, "index.html")
 
 
+@login_required
 def furniture(request):
     try:
         furniture_product = Product.objects.filter( category="6").order_by('-rating')
@@ -293,6 +268,7 @@ def furniture(request):
         return render(request, "index.html")
 
 
+@login_required
 def digital(request):
     try:
         digital_product = Product.objects.filter(category="7").order_by('-rating')
@@ -304,6 +280,7 @@ def digital(request):
         return render(request, "index.html")
 
 
+@login_required
 def watch(request):
     try:
         # show_no_product = request.GET['show_no_product', 10]
@@ -316,6 +293,7 @@ def watch(request):
         return render(request, "index.html")
 
 
+@login_required
 def household(request):
     try:
         household_product = Product.objects.filter(category="9").order_by('-rating')
@@ -327,6 +305,7 @@ def household(request):
         return render(request, "index.html")
 
 
+@login_required
 def cosmetic(request):
     try:
         cosmetic_product = Product.objects.filter(category="10").order_by('-rating')
@@ -338,6 +317,7 @@ def cosmetic(request):
         return render(request, "index.html")
 
 
+@login_required
 def jacket(request):
     try:
         jacket_product = Product.objects.filter(category="11").order_by('-rating')
@@ -349,6 +329,7 @@ def jacket(request):
         return render(request, "index.html")
 
 
+@login_required
 def shoes(request):
     try:
         shoes_product = Product.objects.filter(category="12").order_by('-rating')

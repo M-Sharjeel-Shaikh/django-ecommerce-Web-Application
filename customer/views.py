@@ -11,9 +11,11 @@ from math import ceil
 from customer.utils import coupon
 from store.models import ColorVariant, Product, SizeVariant
 from store.views import nav
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 # =========================== Customer Shopping Journey ====================================
+@login_required
 def create_cart(request, product_uid):
     if request.method == "POST":
         customer = auth.get_user(request)
@@ -36,6 +38,7 @@ def create_cart(request, product_uid):
     return redirect('/user/cart')
 
 
+@login_required
 def cart(request):
     customer = auth.get_user(request)
     if customer.id is not None:
@@ -57,6 +60,7 @@ def cart(request):
     return render(request, "error.html")
 
 
+@login_required
 def remove_cart(request, cart_uid):
     cart_item = Cart.objects.filter(id = cart_uid).first()
     if cart_item:
@@ -64,6 +68,7 @@ def remove_cart(request, cart_uid):
     return redirect("/user/cart")
 
 
+@login_required
 def increment_qty(request, product_uid):
     customer = auth.get_user(request)
     if customer.id is not None:
@@ -75,6 +80,7 @@ def increment_qty(request, product_uid):
     return redirect("/user/cart")
 
 
+@login_required
 def decrement_qty(request, product_uid):
     customer = auth.get_user(request)
     if customer.id is not None:
@@ -86,6 +92,7 @@ def decrement_qty(request, product_uid):
     return redirect("/user/cart")
 
 
+@login_required
 def add_favourite(request, product_uid):
     user = auth.get_user(request)
     customer= Customer.objects.get(user = user)
@@ -94,6 +101,7 @@ def add_favourite(request, product_uid):
     return redirect("/user/favourite")
 
 
+@login_required
 def favourite_user(request):
     customer = auth.get_user(request)
     customer= Customer.objects.get(user = customer)
@@ -101,11 +109,13 @@ def favourite_user(request):
     return render(request, "favourite.html", context = {"total_product": favourite_products})
 
 
+@login_required
 def remove_favourite(request, favourite_uid):
     Favourite.objects.filter(id = favourite_uid).first().delete()
     return redirect("/user/favourite")
 
 
+@login_required
 def checkout(request, customer):
     cart_detail = Cart.objects.filter(user = customer).all()
     total = ceil(sum(item.product.price for item in cart_detail))
