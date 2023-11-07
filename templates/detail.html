@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <body>
     <!-- Breadcrumb Start -->
     <div class="container-fluid">
@@ -55,28 +56,30 @@
                         </div>
                         <small class="pt-1">{{product.rating}}</small>
                     </div>
-                    <h3 class="font-weight-semi-bold mb-4">${{product.price}}</h3>
+                    <h3 class="font-weight-semi-bold mb-4">${{product.total_price}}</h3>
                     <p class="mb-4">{{product.title}}</p>
                     <!-- Cart Form -->
                     <form method="POST" action="/user/create_cart/{{product.uid}}">
                         {% csrf_token %}
                         <div class="d-flex mb-3">
                             <strong class="text-dark mr-3">Sizes:</strong>
-                                {% for size in sizes %}
-                                    <div class="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" class="custom-control-input" id="size-{{size}}" name="size" value="{{size.id}}">
-                                        <label class="custom-control-label" for="size-{{size}}">{{size}}</label>
-                                    </div>
-                                {% endfor %}
+                            {% for size in sizes %}
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" class="custom-control-input" id="size-{{size}}" name="size"
+                                    value="{{size.id}}">
+                                <label class="custom-control-label" for="size-{{size}}">{{size}}</label>
+                            </div>
+                            {% endfor %}
                         </div>
 
                         <div class="d-flex mb-4">
                             <strong class="text-dark mr-3">Colors:</strong>
                             {% for color in colors %}
-                                <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" class="custom-control-input" id="size-{{color}}" name="color" value="{{color.id}}">
-                                    <label class="custom-control-label" for="size-{{color}}">{{color}}</label>
-                                </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" class="custom-control-input" id="size-{{color}}" name="color"
+                                    value="{{color.id}}">
+                                <label class="custom-control-label" for="size-{{color}}">{{color}}</label>
+                            </div>
                             {% endfor %}
                         </div>
 
@@ -87,14 +90,16 @@
                                         <i class="fa fa-minus"></i>
                                     </a>
                                 </div>
-                                <input type="text" id="quantity" class="form-control bg-secondary border-0 text-center" value="1" name="quantity">
+                                <input type="text" id="quantity" class="form-control bg-secondary border-0 text-center"
+                                    value="1" name="quantity" readonly="true">
                                 <div class="input-group-btn">
                                     <a class="btn btn-primary btn-plus" id="increment">
                                         <i class="fa fa-plus"></i>
                                     </a>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To
+                            <button type="submit" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i>
+                                Add To
                                 Cart</button>
                         </div>
                     </form>
@@ -102,16 +107,24 @@
                     <div class="d-flex pt-2">
                         <strong class="text-dark mr-2">Share on:</strong>
                         <div class="d-inline-flex">
-                            <a class="text-dark px-2" href="">
+                            <a class="text-dark px-2"
+                                href="https://www.facebook.com/sharer/sharer.php?u=http://127.0.0.1:8000/detail/{{product.uid}}"
+                                target="_blank">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
-                            <a class="text-dark px-2" href="">
+                            <a class="text-dark px-2"
+                                href="https://twitter.com/share?url=http://127.0.0.1:8000/detail/{{product.uid}}&text=Share it Now!"
+                                target="_blank">
                                 <i class="fab fa-twitter"></i>
                             </a>
-                            <a class="text-dark px-2" href="">
+                            <a class="text-dark px-2"
+                                href="https://www.linkedin.com/shareArticle?mini=true&url=http://127.0.0.1:8000/detail/{{product.uid}}"
+                                target="_blank">
                                 <i class="fab fa-linkedin-in"></i>
                             </a>
-                            <a class="text-dark px-2" href="">
+                            <a class="text-dark px-2"
+                                href="https://www.pinterest.com/pin/create/button/?url=http://127.0.0.1:8000/detail/{{product.uid}}"
+                                data-pin-do="buttonPin" target="_blank">
                                 <i class="fab fa-pinterest"></i>
                             </a>
                         </div>
@@ -123,43 +136,47 @@
             <div class="col">
                 <div class="bg-light p-30">
                     <div class="nav nav-tabs mb-4">
-                        <a class="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">Description</a>
+                        <a class="nav-item nav-link text-dark active" data-toggle="tab"
+                            href="#tab-pane-1">Description</a>
                         <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Information</a>
                         <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">Reviews (0)</a>
                     </div>
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="tab-pane-1">
                             <h4 class="mb-3">Product Description</h4>
-                                <p>{{product.description}}</p>
+                            <p>{{product.description}}</p>
                         </div>
                         <div class="tab-pane fade" id="tab-pane-2">
                             <h4 class="mb-3">Additional Information</h4>
-                                {{product.information | safe}}
+                            {{product.information | safe}}
                         </div>
                         <div class="tab-pane fade" id="tab-pane-3">
                             <div class="row">
                                 <div class="col-md-6">
                                     <h4 class="mb-4">1 review for "{{product.name}}"</h4>
                                     {% for review in reviews %}
-                                        <div class="media mb-4">
-                                            <img src="/static/img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
-                                            <div class="media-body">
-                                                <h6>{{review.user}}<small> - <i>{{review.created_at | date}}</i></small></h6>
-                                                <div class="text-primary mb-2">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star-half-alt"></i>
-                                                    <i class="far fa-star"></i>
-                                                </div>
-                                                <p>{{review.comment}}</p>
+                                    <div class="media mb-4">
+                                        <img src="/static/img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1"
+                                            style="width: 45px;">
+                                        <div class="media-body">
+                                            <h6>{{review.user}}<small> - <i>{{review.created_at | date}}</i></small>
+                                            </h6>
+                                            <div class="text-primary mb-2">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star-half-alt"></i>
+                                                <i class="far fa-star"></i>
                                             </div>
+                                            <p>{{review.comment}}</p>
                                         </div>
+                                    </div>
                                     {% endfor %}
                                 </div>
                                 <div class="col-md-6">
                                     <h4 class="mb-4">Leave a review</h4>
-                                    <small>Your email address will not be published. Required fields are marked *</small>
+                                    <small>Your email address will not be published. Required fields are marked
+                                        *</small>
                                     <form method="POST" action="/comment/{{product.uid}}">
                                         {% csrf_token %}
                                         <div class="d-flex my-3">
@@ -172,13 +189,14 @@
                                                 <i class="far fa-star"></i>
                                             </div>
                                         </div>
-                                            <div class="form-group">
-                                                <label for="message">Your Review *</label>
-                                                <textarea id="message" name="message" cols="30" rows="5" class="form-control"></textarea>
-                                            </div>
-                                            <div class="form-group mb-0">
-                                                <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
-                                            </div>
+                                        <div class="form-group">
+                                            <label for="message">Your Review *</label>
+                                            <textarea id="message" name="message" cols="30" rows="5"
+                                                class="form-control"></textarea>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -193,7 +211,8 @@
 
     <!-- Products Start -->
     <div class="container-fluid py-5">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">You May Also Like</span></h2>
+        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">You May
+                Also Like</span></h2>
         <div class="row px-xl-5">
             <div class="col">
                 <div class="owl-carousel related-carousel">
@@ -201,7 +220,8 @@
                         <div class="product-img position-relative overflow-hidden">
                             <img class="img-fluid w-100" src="static/img/product-1.jpg" alt="">
                             <div class="product-action">
-                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i
+                                        class="fa fa-shopping-cart"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
@@ -210,7 +230,8 @@
                         <div class="text-center py-4">
                             <a class="h6 text-decoration-none text-truncate" href="">Product Name Goes Here</a>
                             <div class="d-flex align-items-center justify-content-center mt-2">
-                                <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                                <h5>$123.00</h5>
+                                <h6 class="text-muted ml-2"><del>$123.00</del></h6>
                             </div>
                             <div class="d-flex align-items-center justify-content-center mb-1">
                                 <small class="fa fa-star text-primary mr-1"></small>
@@ -226,7 +247,8 @@
                         <div class="product-img position-relative overflow-hidden">
                             <img class="img-fluid w-100" src="img/product-2.jpg" alt="">
                             <div class="product-action">
-                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i
+                                        class="fa fa-shopping-cart"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
@@ -235,7 +257,8 @@
                         <div class="text-center py-4">
                             <a class="h6 text-decoration-none text-truncate" href="">Product Name Goes Here</a>
                             <div class="d-flex align-items-center justify-content-center mt-2">
-                                <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                                <h5>$123.00</h5>
+                                <h6 class="text-muted ml-2"><del>$123.00</del></h6>
                             </div>
                             <div class="d-flex align-items-center justify-content-center mb-1">
                                 <small class="fa fa-star text-primary mr-1"></small>
@@ -251,7 +274,8 @@
                         <div class="product-img position-relative overflow-hidden">
                             <img class="img-fluid w-100" src="img/product-3.jpg" alt="">
                             <div class="product-action">
-                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i
+                                        class="fa fa-shopping-cart"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
@@ -260,7 +284,8 @@
                         <div class="text-center py-4">
                             <a class="h6 text-decoration-none text-truncate" href="">Product Name Goes Here</a>
                             <div class="d-flex align-items-center justify-content-center mt-2">
-                                <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                                <h5>$123.00</h5>
+                                <h6 class="text-muted ml-2"><del>$123.00</del></h6>
                             </div>
                             <div class="d-flex align-items-center justify-content-center mb-1">
                                 <small class="fa fa-star text-primary mr-1"></small>
@@ -276,7 +301,8 @@
                         <div class="product-img position-relative overflow-hidden">
                             <img class="img-fluid w-100" src="img/product-4.jpg" alt="">
                             <div class="product-action">
-                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i
+                                        class="fa fa-shopping-cart"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
@@ -285,7 +311,8 @@
                         <div class="text-center py-4">
                             <a class="h6 text-decoration-none text-truncate" href="">Product Name Goes Here</a>
                             <div class="d-flex align-items-center justify-content-center mt-2">
-                                <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                                <h5>$123.00</h5>
+                                <h6 class="text-muted ml-2"><del>$123.00</del></h6>
                             </div>
                             <div class="d-flex align-items-center justify-content-center mb-1">
                                 <small class="fa fa-star text-primary mr-1"></small>
@@ -301,7 +328,8 @@
                         <div class="product-img position-relative overflow-hidden">
                             <img class="img-fluid w-100" src="img/product-5.jpg" alt="">
                             <div class="product-action">
-                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i
+                                        class="fa fa-shopping-cart"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
@@ -310,7 +338,8 @@
                         <div class="text-center py-4">
                             <a class="h6 text-decoration-none text-truncate" href="">Product Name Goes Here</a>
                             <div class="d-flex align-items-center justify-content-center mt-2">
-                                <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                                <h5>$123.00</h5>
+                                <h6 class="text-muted ml-2"><del>$123.00</del></h6>
                             </div>
                             <div class="d-flex align-items-center justify-content-center mb-1">
                                 <small class="fa fa-star text-primary mr-1"></small>
@@ -328,10 +357,21 @@
     </div>
     <!-- Products End -->
     <script>
-        document.getElementById('increment').onclick = set_qty;
-        function set_qty(){
-            incre = document.getElementById('quantity').value++;
-            document.getElementById('quantity').value.innerHTML = incre;
+        var qty = document.getElementById('quantity');
+        qty.value = 1;
+        document.getElementById('increment').onclick = add_qty;
+        function add_qty() {
+            if(qty.value > 0) {
+                incre = qty.value++;
+                qty.value.innerHTML = incre;
+            }
+        }
+        document.getElementById('decrement').onclick = less_qty;
+        function less_qty() {
+            if(qty.value > 1) {
+                incre = qty.value--;
+                qty.value.innerHTML = incre;
+            }
         }
     </script>
 </body>

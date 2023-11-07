@@ -74,7 +74,7 @@ def increment_qty(request, product_uid):
     if customer.id is not None:
         cart_detail = Cart.objects.filter(user = customer)
         for item in cart_detail:
-            if str(item.product.uid) == product_uid:
+            if item.quantity > 0 and str(item.product.uid) == product_uid:
                 item.quantity += 1
                 item.save()
     return redirect("/user/cart")
@@ -86,7 +86,7 @@ def decrement_qty(request, product_uid):
     if customer.id is not None:
         cart_detail = Cart.objects.filter(user = customer)
         for item in cart_detail:
-            if str(item.product.uid) == product_uid:
+            if item.quantity > 1 and str(item.product.uid) == product_uid:
                 item.quantity -= 1
                 item.save()
     return redirect("/user/cart")

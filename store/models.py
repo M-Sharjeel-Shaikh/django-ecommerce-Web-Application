@@ -59,7 +59,9 @@ class Product(BaseModel):
     title = models.TextField(max_length=150, null="None")
     information = RichTextField()
     price = models.FloatField(default=0)
-    discount_price = models.IntegerField(default=0)
+    discount_price = models.IntegerField(default=0, blank=True, null=True)
+    delivery_charges = models.IntegerField(default=0)
+    total_price = models.IntegerField(default=0)
     image = models.ImageField(null=True, upload_to='media/')
     extra_image = models.ImageField(null=True, blank = True,upload_to='media/')
     display_image = models.ImageField(upload_to='media/')
@@ -84,14 +86,15 @@ class Product(BaseModel):
         ("12", "Shoes"),
     ) 
     
-    category = models.CharField( 
-        max_length = 20, 
-        choices = CATEGORY_CHOICES, 
-        default = '1'
-        )
+    category = models.CharField(max_length = 20, choices = CATEGORY_CHOICES, default = '1')
     
     def __str__(self):
         return self.name
+
+    # def save(self, **kwargs):
+    #     total = self.total_price
+    #     total = self.price + self.discount_price
+    #     return total
 
     # def average_review(self):
     #     reviews = Review.objects.filter(product=self).aggregate(average=Avg('rate'))
@@ -114,6 +117,15 @@ class Product(BaseModel):
     #     super(Product, self).save(**kwargs)
     #     return avg
 
+@receiver(pre_save, sender=Product)
+def save(sender, instance, *args, **kwarg):
+    if instance.discount_price is not None: 
+        if instance.discount_price > 0:
+            instance.total_price = instance.discount_price + instance.delivery_charges
+    else:    
+        instance.total_price = instance.price + instance.delivery_charges
+    return instance.total_price
+    
 
 @receiver(pre_save, sender=Product)
 def pre_save_receiver(sender, instance, *args, **kwargs):
