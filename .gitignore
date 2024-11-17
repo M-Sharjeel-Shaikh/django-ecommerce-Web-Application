@@ -130,3 +130,6 @@ dmypy.json
 
 # project
 # log/*
+contact/__pycache__/
+migrations/
+.pyc
