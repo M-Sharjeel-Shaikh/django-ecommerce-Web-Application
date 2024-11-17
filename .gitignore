@@ -132,4 +132,4 @@ dmypy.json
 # log/*
 contact/__pycache__/
 migrations/
-.pyc
+*.pyc

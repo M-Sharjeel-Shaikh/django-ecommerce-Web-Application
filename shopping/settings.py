@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     'store',
     'customer',
     'contact',
-    'ckeditor',
+    'django_ckeditor_5',
 
 ]
 
